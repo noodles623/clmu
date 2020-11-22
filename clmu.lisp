@@ -2,23 +2,12 @@
 (asdf:load-system :lquery)
 
 ;; Add manga here
-;;(defvar *manga*
-;;  '(
+(defvar *manga*
+  '(
 ;;    (:title "Manga 1"
 ;;     :url "https://www.mangaupdates.com/releases.html?search=[xxxx]&stype=series")
 ;;    (:title "Manga 2"
 ;;     :url "https://www.mangaupdates.com/releases.html?search=[xxxx]&stype=series")
-;;    ))
-
-(defvar *manga*
-  '((:title "Golden Kamui"
-     :url "https://www.mangaupdates.com/releases.html?search=113608&stype=series")
-    (:title "Chainsaw Man"
-     :url "https://www.mangaupdates.com/releases.html?search=151847&stype=series")
-    (:title "Berserk"
-     :url "https://www.mangaupdates.com/releases.html?search=88&stype=series")
-    (:title "Sono Bisque Doll"
-     :url "https://www.mangaupdates.com/releases.html?search=146700&stype=series")
     ))
 
 (defun spaces (n acc)
