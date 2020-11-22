@@ -2,12 +2,23 @@
 (asdf:load-system :lquery)
 
 ;; Add manga here
-(defvar *manga*
-  '(
+;;(defvar *manga*
+;;  '(
 ;;    (:title "Manga 1"
 ;;     :url "https://www.mangaupdates.com/releases.html?search=[xxxx]&stype=series")
 ;;    (:title "Manga 2"
 ;;     :url "https://www.mangaupdates.com/releases.html?search=[xxxx]&stype=series")
+;;    ))
+
+(defvar *manga*
+  '((:title "Golden Kamui"
+     :url "https://www.mangaupdates.com/releases.html?search=113608&stype=series")
+    (:title "Chainsaw Man"
+     :url "https://www.mangaupdates.com/releases.html?search=151847&stype=series")
+    (:title "Berserk"
+     :url "https://www.mangaupdates.com/releases.html?search=88&stype=series")
+    (:title "Sono Bisque Doll"
+     :url "https://www.mangaupdates.com/releases.html?search=146700&stype=series")
     ))
 
 (defun spaces (n acc)
@@ -33,25 +44,17 @@
   (let ((request (dex:get url)))
     (lquery:$ (initialize request))))
 
-(defun parse-date (page)
-  (let ((dates (lquery:$ page "#main_content .col-2" (text))))
-    (elt dates 1)))
-
-(defun parse-chapter (page)
-  (let ((chapt (lquery:$ page "#main_content .col-1" (text))))
-    (elt chapt 3)))
-
-(defun parse-group (page)
-  (let ((group (lquery:$ page "#main_content .col-4" (text))))
-    (elt group 3)))
+(defun parse-info (page query n)
+  (let ((info (lquery:$ page query (text))))
+    (elt info n)))
 
 (defun parse-release (m)
   (let ((page (load-url (getf m :url))))
     (release
      (getf m :title)
-     (parse-date page)
-     (parse-chapter page)
-     (parse-group page))))
+     (parse-info page "#main_content .col-2" 1)
+     (parse-info page "#main_content .col-1" 3)
+     (parse-info page "#main_content .col-4" 3))))
 
 (defun get-len (rl id)
   (apply #'max (mapcar (lambda (x) (length (getf x id))) rl)))
@@ -87,5 +90,6 @@
 (defun main ()
   (let ((rels (get-releases)))
     (mapcar (lambda (r)
-	      (print-release r (get-len rels :title) (get-len rels :chapter)))
+	      (print-release
+	       r (get-len rels :title) (get-len rels :chapter)))
 	    rels)))
